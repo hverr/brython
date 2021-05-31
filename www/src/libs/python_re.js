@@ -316,10 +316,10 @@ BPattern.fullmatch = function(self, string){
         return _b_.None
     }
 }
-var GroupIndex = $B.make_class("GroupIndex",
-    function(self, _default){
-        var res = $B.empty_dict()
-        res.__class__ = GroupIndex
+
+BPattern.groupindex = {
+    __get__: function(self){
+        var res = _b_.dict.$factory()
         for(var key in self.$groups){
             if(isNaN(parseInt(key))){
                 res.$string_dict[key] = [self.$groups[key].num,
@@ -327,18 +327,6 @@ var GroupIndex = $B.make_class("GroupIndex",
             }
         }
         return res
-    }
-)
-GroupIndex.__mro__ = [_b_.dict, _b_.object]
-GroupIndex.__setitem__ = function(){
-    throw _b_.TypeError.$factory("read only")
-}
-
-$B.set_func_names(GroupIndex, "re")
-
-BPattern.groupindex = {
-    __get__: function(self){
-        return GroupIndex.$factory(self)
     }
 }
 
@@ -2497,12 +2485,6 @@ function from_codepoint_list(codepoints, type){
     return s
 }
 
-var GroupDict = $B.make_class("GroupDict")
-GroupDict.__mro__ = [_b_.dict, _b_.object]
-GroupDict.__setitem__ = function(){
-    throw _b_.TypeError.$factory("read only")
-}
-
 
 var bytes_like = [_b_.bytes, _b_.bytearray, _b_.memoryview]
 
@@ -3081,7 +3063,7 @@ BMO.groupdict = function(){
                 null, null),
         self = $.self,
         groupobj = $.self.mo.$groups,
-        d = $B.empty_dict()
+        d = _b_.dict.$factory()
     for(var key in $.self.mo.node.$groups){
         if(! isFinite(key)){
             var value = groupobj[key] === undefined ? $.default :
@@ -3092,7 +3074,6 @@ BMO.groupdict = function(){
             _b_.dict.$setitem(d, key, value)
         }
     }
-    d.__class__ = GroupDict
     return d
 }
 
